@@ -151,7 +151,7 @@
             if($.fn.ellipsify){
                 $wrapper.find(div).not(':last').each( function () {
                     $(this).find(p).ellipsify({
-                        count: config.point_break - 1,
+                        count: config.point_break - 1
                     });
                 });
             }
