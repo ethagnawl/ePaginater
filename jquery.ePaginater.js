@@ -30,17 +30,18 @@
         };
         $.fn.chop = function () {
             return this.get(0).innerHTML.split(' ');
-        }
+        };
         $.fn.css_bg = function (add) {
             return this.css('background-color', add ? config.active : '')
-        }
+        };
         $.fn.css_f = function (add) {
             return this.css('color', add ? '#666' : config.color)
-        }        
+        };        
         if (this.chop().length > config.point_break){
-            //  MyBuilder
-            var MyBuilder={make:function(node,id,attributes,classname,text,childs){element=document.createElement(node);if(id){element.id=id;}if(attributes){for(var key in attributes){if(attributes.hasOwnProperty(key)){element.setAttribute([key],attributes[key]);}}}if(classname){typeof classname==='object'?element.className=classname.join(' '): element.className=classname;}if(text){element.appendChild(document.createTextNode(text));}if(childs){if(!childs.length){element.appendChild(childs);}else{for(var i=0;i<childs.length;i++){element.appendChild(childs[i]);}}}return element;}}
-                ,   a = 'a' 
+            //  eBuilder
+            var eBuilder = function eBuilder(e,id,a,c,t,ch){var el=document.createElement(e);if(id){el.id=id}if(a){for(var key in a){if(a.hasOwnProperty(key)){el.setAttribute([key],a[key])}}}if(c){el.className=typeof c==='object'&&c.constructor===Array?c.join(' '):c}if(t){el.appendChild(document.createTextNode(t))}if(ch){if(!ch.length){el.appendChild(ch)}else{for(var i=0;i<ch.length;i+=1){el.appendChild(ch[i])}}}return el}
+                ,   a = 'a'
+                ,   button = 'button'
                 ,   add = 'add'
                 ,   count = 0
                 ,   div = 'div'
@@ -48,7 +49,6 @@
                 ,   elems = []
                 ,   id = 0
                 ,   inner = []
-                ,   js_link = {href: 'javascript:void(0);'}
                 ,   li = 'li'
                 ,   lis = []
                 ,   master_arr = []
@@ -58,14 +58,14 @@
                 ,   on_class = '.on'
                 ,   p = 'p'
                 ,   page = 'page'
-                ,   pag_prev = 'pag_prev'
+                ,   pag_prev =  'pag_prev'
                 ,   pag_next = 'pag_next'
                 ,   $wrapper = this
                 ,   jam = function (arr) {
                         return arr.join(' ');
                     }
                 ,   insert_pag = function () {
-                        var $page = $(MyBuilder.make(div, 'page_'+id));
+                        var $page = $(eBuilder(div, 'page_'+id));
                         $.each(elems, function () {
                             this.appendTo($page);    
                         });
@@ -82,36 +82,38 @@
                             elems.push($that);
                             count += this_length;
                         } else {
-                            var new_p = (inner.slice(0)).slice(slice_point)
-                                ,   slice_point = +- ((this_length + count) - config.point_break)
+                            var slice_point = +- ((this_length + count) - config.point_break)
+                                ,   new_p = (inner.slice(0)).slice(slice_point)
                             ;
                             $that.text(jam(inner.slice(0, config.point_break - count)));
                             elems.push($that);
                             insert_pag();
                             count = new_p.length;
-                            elems.push($(MyBuilder.make(p, '', '', '', jam(new_p))));
+                            elems.push($(eBuilder(p, '', '', '', jam(new_p))));
                         }
-                        if (i + 1 === master_arr.length) insert_pag();
+                        if (i + 1 === master_arr.length) {
+                            insert_pag();
+                        }
                     }
             ;
             $wrapper.find(p).each( function (i) {
                 paginater_loop($(this), i);
             });
             if ($wrapper.find(div).size() > 1) {
-                $(MyBuilder.make('ul', '', '', $nav.split('.')[1], '', [MyBuilder.make(li, '', '', '', '', MyBuilder.make(a, pag_prev, js_link, '', '< previous')), MyBuilder.make(li, '', '', '', '', MyBuilder.make(a, pag_next, js_link, '', 'next >'))])).appendTo(this);
-                $nav = $($nav)
+                $(eBuilder('ul', '', '', $nav.split('.')[1], '', [eBuilder(li, '', '', '', '', eBuilder(button, pag_prev, 0, '', '< previous')), eBuilder(li, '', '', '', '', eBuilder(button, pag_next, 0, '', 'next >'))])).appendTo(this);
+                $nav = $($nav);
                 for (i = 0; i < this.find(div).length; i++) {
-                    lis.push($(MyBuilder.make(li, '', '', '', '', MyBuilder.make(a, 'dot_'+i, js_link, '', i+1))).data(page, true));
+                    lis.push($(eBuilder(li, '', '', '', '', eBuilder(button, 'dot_'+i, 0, '', i+1))).data(page, true));
                 }
             }
             $.each(lis, function () {
                 $nav.children().last().before(this);
             });
-            $nav.find(li).css({'float': 'left', 'margin-right': '4px'})    
-            $nav.find(a).css({'border': '1px solid #eee', 'color': config.color, 'padding': '4px'});
-            $(lis[0]).find(a).addClass(on).css_f(add);
+            $nav.find(li).css({float: 'left', 'margin-right': '4px'}); 
+            $nav.find(button).css({border: '1px solid #eee', color: config.color, padding: '4px'});
+            $(lis[0]).find(button).addClass(on).css_f(add);
             $(document.getElementById('page_0')).addClass(on).show();
-            $nav.find(a).hover(
+            $nav.find(button).hover(
                 function () {
                     var $this = $(this);
                     mouseover = true;
@@ -119,25 +121,31 @@
                     if (this.id === pag_prev || this.id === pag_next) {
                         if (this.id === pag_prev && $elem.prev().data(page)){
                             $this.css_bg(add);
-                            $elem.prev().find(a).css_bg(add);
+                            $elem.prev().find(button).css_bg(add);
                         }    
                         if (this.id === pag_next && $elem.next().data(page)){
                             $this.css_bg(add);
-                            $elem.next().find(a).css_bg(add);
+                            $elem.next().find(button).css_bg(add);
                         }                         
                     } else {
-                        if ($this.attr('class') !== on) $this.css_bg(add);
+                        if ($this.attr('class') !== on) {
+                            $this.css_bg(add);
+                        }
                     }
                 },
                 function () {
                     $elem = $nav.find(on_class).parent();
                     mouseover = false; 
                     $(this).css_bg();
-                    if (this.id === pag_prev && $elem.prev().data(page)) $elem.prev().find(a).css_bg();
-                    if (this.id === pag_next && $elem.next().data(page)) $elem.next().find(a).css_bg();
+                    if (this.id === pag_prev && $elem.prev().data(page)) {
+                        $elem.prev().find(button).css_bg();
+                    }
+                    if (this.id === pag_next && $elem.next().data(page)) {
+                        $elem.next().find(button).css_bg();
+                    }
                 }            
             );
-            $nav.find(a).click( function () {
+            $nav.find(button).click( function () {
                 var scroll_back = $nav.find(on_class).parent().prev().data(page)
                     ,   scroll_fwd = $nav.find(on_class).parent().next().data(page)
                     ,   pag_click = function (that) {
@@ -151,16 +159,24 @@
                     }
                 ;
                 if (this.id === pag_prev) {
-                    if (scroll_back){
-                        scroll($nav.find(on_class).parent().prev().find(a).attr('id'));
-                        if (mouseover) $nav.find(on_class).parent().prev().find(a).css_bg(add);
-                        if ($nav.find(on_class).parent().index() === 1) $(document.getElementById(pag_prev)).css_bg();
+                    if (scroll_back) {
+                        scroll($nav.find(on_class).parent().prev().find(button).attr('id'));
+                        if (mouseover) {
+                            $nav.find(on_class).parent().prev().find(button).css_bg(add);
+                        }
+                        if ($nav.find(on_class).parent().index() === 1) {
+                            $(document.getElementById(pag_prev)).css_bg();
+                        }
                     }
                 } else if (this.id === pag_next) {
-                    if (scroll_fwd){
-                        scroll($nav.find(on_class).parent().next().find(a).attr('id'));
-                        if (mouseover) $nav.find(on_class).parent().next().find(a).css_bg(add);
-                        if ($nav.find(on_class).parent().next().is(':last-child')) $(document.getElementById(pag_next)).css_bg();
+                    if (scroll_fwd) {
+                        scroll($nav.find(on_class).parent().next().find(button).attr('id'));
+                        if (mouseover) {
+                            $nav.find(on_class).parent().next().find(button).css_bg(add);
+                        }
+                        if ($nav.find(on_class).parent().next().is(':last-child')) {
+                            $(document.getElementById(pag_next)).css_bg();
+                        }
                     } else {
                         $(document.getElementById(pag_next)).css_bg();
                     }
@@ -179,6 +195,6 @@
                 });
             }
         }    
-    	return this;
+        return this;
 	};
 })(jQuery);
