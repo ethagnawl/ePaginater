@@ -26,7 +26,10 @@
         var config = {
             active: this.css('color') || '#666',
             color: $('body').find('a').eq(0).css('color') || '#228fdd',    
-            point_break:160
+            point_break: 160
+        };
+        Array.prototype.jam = function jam() {
+            return this.join(' ');
         };
         $.fn.chop = function () {
             return this.get(0).innerHTML.split(' ');
@@ -36,8 +39,8 @@
         };
         $.fn.css_f = function (add) {
             return this.css('color', add ? '#666' : config.color)
-        };        
-        if (this.chop().length > config.point_break){
+        };
+        if (this.chop().length > config.point_break) {
             //  eBuilder
             var eBuilder = function eBuilder(e,id,a,c,t,ch){var el=document.createElement(e);if(id){el.id=id}if(a){for(var key in a){if(a.hasOwnProperty(key)){el.setAttribute([key],a[key])}}}if(c){el.className=typeof c==='object'&&c.constructor===Array?c.join(' '):c}if(t){el.appendChild(document.createTextNode(t))}if(ch){if(!ch.length){el.appendChild(ch)}else{for(var i=0;i<ch.length;i+=1){el.appendChild(ch[i])}}}return el}
                 ,   a = 'a'
@@ -61,9 +64,6 @@
                 ,   pag_prev =  'pag_prev'
                 ,   pag_next = 'pag_next'
                 ,   $wrapper = this
-                ,   jam = function (arr) {
-                        return arr.join(' ');
-                    }
                 ,   insert_pag = function () {
                         var $page = $(eBuilder(div, 'page_'+id));
                         $.each(elems, function () {
@@ -85,11 +85,11 @@
                             var slice_point = +- ((this_length + count) - config.point_break)
                                 ,   new_p = (inner.slice(0)).slice(slice_point)
                             ;
-                            $that.text(jam(inner.slice(0, config.point_break - count)));
+                            $that.text(inner.slice(0, config.point_break - count).jam());
                             elems.push($that);
                             insert_pag();
                             count = new_p.length;
-                            elems.push($(eBuilder(p, '', '', '', jam(new_p))));
+                            elems.push($(eBuilder(p, '', '', '', new_p.jam())));
                         }
                         if (i + 1 === master_arr.length) {
                             insert_pag();
@@ -187,7 +187,7 @@
                     pag_click(this.id);
                 }
             });
-            if($.fn.ellipsify){
+            if ($.fn.ellipsify) {
                 $wrapper.find(div).not(':last').each( function () {
                     $(this).find(p).ellipsify({
                         count: config.point_break - 1
@@ -198,3 +198,4 @@
         return this;
 	};
 })(jQuery);
+
