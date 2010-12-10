@@ -1,0 +1,15 @@
+#ePaginater div.on { display:block; }
+
+ul.nav-dots li { float:left; list-style-type:none; margin-right:4px; }
+
+ul.nav-dots li button { border:1px solid rgba(238, 238, 238, 0.8); color:rgba(34, 143, 221, 0.8); padding:4px; }
+
+ul.nav-dots li button:hover,
+        ul.nav-dots li button:focus { background-color:rgba(102, 102, 102, 0.3); cursor:pointer; }
+
+ul.nav-dots li button.on { border:1px solid rgba(102, 102, 102, 0.3); color:rgba(102, 102, 102, 0.8); }
+
+ul.nav-dots li button.on:hover,
+        ul.nav-dots li button.on:focus, 
+            ul.nav-dots li button.off:hover,
+                    ul.nav-dots li button.off:focus { background-color:transparent; cursor:default; }
