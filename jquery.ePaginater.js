@@ -36,7 +36,7 @@
             return this.get(0).innerHTML.split(' ');
         };
         if (this.chop().length > config.point_break) {
-            //  eBuilder
+            //  eBuilder - https://github.com/ethagnawl/eBuilder 
             function eBuilder(e,id,a,c,t,ch){var el=document.createElement(e);if(id){el.id=id;}if(a){for(var key in a){if(a.hasOwnProperty(key)){el.setAttribute([key],a[key]);}}}if(c){el.className=typeof c==='object'&&c.constructor===Array?c.join(' '):c;}if(t){el.appendChild(document.createTextNode(t));}if(ch){if(!ch.length){el.appendChild(ch);}else{for(var i=0;i<ch.length;i+=1){el.appendChild(ch[i]);}}}return el;}
 
             var button = 'button'
