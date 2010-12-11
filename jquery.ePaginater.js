@@ -27,6 +27,8 @@
         var config = {
             point_break: 160
         };
+        $.extend(config, options);
+console.log(config.point_break);
         Array.prototype.jam = function jam() {
             return this.join(' ');
         };
@@ -50,7 +52,7 @@
                 ,   mouseover 
                 ,   $nav = '.nav-dots'
                 ,   on = 'on'
-                ,   on_class = '.'+on
+                ,   on_class = '.' + on
                 ,   p = 'p'
                 ,   page = 'page'
                 ,   pag_prev =  'pag_prev'
