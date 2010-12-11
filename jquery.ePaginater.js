@@ -23,12 +23,10 @@
 
 ( function ($) {
     $.fn.ePaginater = function (options) {
-        // TODO: extend options arg...
         var config = {
             point_break: 160
         };
         $.extend(config, options);
-console.log(config.point_break);
         Array.prototype.jam = function jam() {
             return this.join(' ');
         };
