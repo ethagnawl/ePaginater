@@ -26,7 +26,9 @@
         var config = {
             point_break: 160
         };
-        $.extend(config, options);
+        if (options) {
+            $.extend(config, options);
+        }
         Array.prototype.jam = function jam() {
             return this.join(' ');
         };
