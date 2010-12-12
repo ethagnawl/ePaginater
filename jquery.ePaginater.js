@@ -203,13 +203,15 @@
   //                  alert('bam!');
                 }                
             });
+/*            
             if ($.fn.ellipsify) {
                 $wrapper.find(div).not(':last').each( function () {
-                    $(this).find(p).ellipsify({
+                    $(this).children().ellipsify({
                         count: config.point_break - 1
                     });
                 });
             }
+*/
         }
         return this;
 	};
