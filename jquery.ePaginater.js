@@ -36,31 +36,12 @@
             return this.get(0).innerHTML.split(' ');
         };
         if (this.chop().length > config.point_break) {
+
             //  eBuilder - https://github.com/ethagnawl/eBuilder 
             function eBuilder(e,id,a,c,t,ch){var el=document.createElement(e);if(id){el.id=id;}if(a){for(var key in a){if(a.hasOwnProperty(key)){el.setAttribute([key],a[key]);}}}if(c){el.className=typeof c==='object'&&c.constructor===Array?c.join(' '):c;}if(t){el.appendChild(document.createTextNode(t));}if(ch){if(!ch.length){el.appendChild(ch);}else{for(var i=0;i<ch.length;i+=1){el.appendChild(ch[i]);}}}return el;}
 
-            var button = 'button'
-                ,   count = 0
-                ,   div = 'div'
-                ,   $elem
-                ,   elems = []
-                ,   id = 0
-                ,   inner = []
-                ,   li = 'li'
-                ,   lis = []
-                ,   master_arr = []
-                ,   mouseover 
-                ,   $nav = '.nav-dots'
-                ,   on = 'on'
-                ,   on_class = '.' + on
-                ,   p = 'p'
-                ,   page = 'page'
-                ,   pag_prev =  'pag_prev'
-                ,   pag_next = 'pag_next'
-                ,   $wrapper = this
-            ;
             function insert_pag() {
-                var $page = $(eBuilder(div, 'page_'+id));
+                var $page = $(eBuilder(div, 'page_' + id));
                 $.each(elems, function () {
                     this.appendTo($page);    
                 });
@@ -68,7 +49,8 @@
                 id += 1;
                 elems.length = 0;
             }
-            function paginater_loop($that, i) {
+
+            function paginater_loop($that, i, el) {
                 var this_length = $that.chop().length
                     ,   pl_count = this_length + count
                 ;
@@ -78,81 +60,125 @@
                     count += this_length;
                 } else {
                     var slice_point = (this_length + count) - config.point_break
-                        ,   new_p = inner.slice(config.point_break - count)
+                        ,   new_el = inner.slice(config.point_break - count)
                     ;
                     $that.text(inner.slice(0, config.point_break - count).jam());
                     elems[elems.length] = $that;
                     insert_pag();
-                    count = new_p.length;
+                    count = new_el.length;
                     if (count > config.point_break) {
-                        while (new_p.length > config.point_break) {
-                            var newer_p = new_p.splice(0, config.point_break).jam();
-                            elems[elems.length] = $(eBuilder(p, 0, 0, 0, newer_p));
+                        while (new_el.length > config.point_break) {
+                            var newer_el = new_p.splice(0, config.point_break).jam();
+                            elems[elems.length] = $(eBuilder(el, 0, 0, 0, newer_el));
                             insert_pag();                        
                         }
                     }
-                    elems[elems.length] = $(eBuilder(p, 0, 0, 0, new_p.jam()));
+                    elems[elems.length] = $(eBuilder(el, 0, 0, 0, new_el.jam()));
                 }
                 if (i + 1 === master_arr.length) {
                     insert_pag();
                 }
             }
-            $wrapper.find(p).each( function (i) {
-                paginater_loop($(this), i);
+
+            function pag_click(that) {
+                $(document.getElementById('page_'+that.split('_')[1])).addClass(on);
+            }
+
+            function scroll(direction) {
+                $wrapper.find(on_class).removeClass(on);
+                $(document.getElementById(direction)).addClass(on);
+                pag_click(direction);
+            }                    
+
+            var button = 'button'
+                ,   count = 0
+                ,   directional = 'directional'
+                ,   directional_class = '.' + directional                
+                ,   div = 'div'
+                ,   $elem
+                ,   elems = []
+                ,   els = 'p'
+                ,   i
+                ,   id = 0
+                ,   inner = []
+                ,   li = 'li'
+                ,   lis = []
+                ,   master_arr = []
+                ,   mouseover 
+                ,   nav_id = 'ePaginater_nav'
+                ,   $nav
+                ,   off = 'off'
+                ,   off_class = '.' + off
+                ,   on = 'on'
+                ,   on_class = '.' + on
+                ,   p = 'p'
+                ,   page = 'page'
+                ,   pag_prev =  'pag_prev'
+                ,   pag_next = 'pag_next'
+                ,   $wrapper = this
+            ;
+
+            $wrapper.children().each( function (i) {
+                paginater_loop($(this), i, this.nodeName);
             });
+            
             if ($wrapper.find(div).size() > 1) {
-                $(eBuilder('ul', 0, 0, $nav.split('.')[1], 0, [eBuilder(li, 0, 0, 0, 0, eBuilder(button, pag_prev, 0, 'directional', '< previous')), eBuilder(li, 0, 0, 0, 0, eBuilder(button, pag_next, 0, 'directional', 'next >'))])).appendTo(this);
-                $nav = $($nav);
-                for (i = 0; i < this.find(div).length; i++) {
+                $(eBuilder('ul', nav_id, 0, 0, 0, [
+                    eBuilder(li, 0, 0, 0, 0, 
+                        eBuilder(button, pag_prev, 0, directional, '< previous')
+                    ), 
+                    eBuilder(li, 0, 0, 0, 0, 
+                        eBuilder(button, pag_next, 0, directional, 'next >')
+                    )
+                ])).appendTo(this);
+                $nav = $(document.getElementById(nav_id));
+                for (i = 0; i < this.find(div).length; i += 1) {
                     lis[lis.length] = $(eBuilder(li, 0, 0, 0, 0, eBuilder(button, 'dot_'+i, 0, 0, i+1))).data(page, true);
                 }
             }
+            
             $.each(lis, function () {
                 $nav.children().last().before(this);
             });
+            
             $(lis[0]).find(button).addClass(on);
-            $(document.getElementById('page_0')).addClass(on).show();
-            $nav.find(button).hover(
-                function () {
-                    if ($(this).hasClass('directional')) {
-                        mouseover = true;
-                        $elem = $nav.find(on_class).parent();
-                        if ((this.id === pag_prev && $elem.prev().data(page) === undefined) || (this.id === pag_next && $elem.next().data(page) === undefined)) {
-                            $(this).addClass('off');                    
-                        }           
-                    }
-                },
-                function () {
-                    if ($(this).hasClass('directional')) {
-                        mouseover = false; 
-                        $elem = $nav.find(on_class).parent();
-                        if ((this.id === pag_prev && $elem.prev().data(page) === undefined) || (this.id === pag_next && $elem.next().data(page) === undefined)) {
-                            $(this).removeClass('off');                    
-                        }
-                    }
-                }            
-            ).click( function () {
-                function pag_click(that) {
-                    $(document.getElementById('page_'+that.split('_')[1])).addClass(on).show();                                
+            
+            $(document.getElementById('page_0')).addClass(on);
+            
+            $(directional_class).hover(
+            function () {
+                if ($(this).hasClass(directional)) {
+                    mouseover = true;
+                    $elem = $nav.find(on_class).parent();
+                    if ((this.id === pag_prev && $elem.prev().data(page) === undefined) || (this.id === pag_next && $elem.next().data(page) === undefined)) {
+                        $(this).addClass(off);
+                    }           
                 }
-                function scroll(direction) {
-                    $nav.find(on_class).removeClass(on);
-                    $wrapper.find(on_class).removeClass(on_class).hide();
-                    $(document.getElementById(direction)).addClass(on);
-                    pag_click(direction);
-                }                    
-                var scroll_back = $nav.find(on_class).parent().prev().data(page)
+            },
+            function () {
+                if ($(this).hasClass(directional)) {
+                    mouseover = false; 
+                    $elem = $nav.find(on_class).parent();
+                    if ((this.id === pag_prev && $elem.prev().data(page) === undefined) || (this.id === pag_next && $elem.next().data(page) === undefined)) {
+                        $(this).removeClass(off);                    
+                    }
+                }
+            });
+            
+            $nav.delegate(button, 'click', function () {
+                var id = this.id
+                    ,   scroll_back = $nav.find(on_class).parent().prev().data(page)
                     ,   scroll_fwd = $nav.find(on_class).parent().next().data(page)
                 ;
-                if (this.id === pag_prev && scroll_back) {
+                if (id === pag_prev && scroll_back) {
                     scroll($nav.find(on_class).parent().prev().find(button).attr('id'));
                     if (mouseover) {
-
+                        
                     }
                     if ($nav.find(on_class).parent().index() === 1) {
 
                     }
-                } else if (this.id === pag_next && scroll_fwd) {
+                } else if (id === pag_next && scroll_fwd) {
                     scroll($nav.find(on_class).parent().next().find(button).attr('id'));
                     if (mouseover) {
 
@@ -160,13 +186,16 @@
                     if ($nav.find(on_class).parent().next().is(':last-child')) {
 
                     }
+                } else if ((id === pag_prev && !scroll_back) || (id === pag_next && !scroll_fwd)) {
+                    // set mouseover to false and add .off
+                    return false;
                 } else {
-                    $nav.find(on_class).removeClass(on);
-                    $wrapper.find(on_class).hide();
+                    $wrapper.find(on_class).removeClass(on);
                     $(this).addClass(on);
-                    pag_click(this.id);
+                    pag_click(id);
                 }
             });
+            
             if ($.fn.ellipsify) {
                 $wrapper.find(div).not(':last').each( function () {
                     $(this).find(p).ellipsify({
@@ -174,7 +203,7 @@
                     });
                 });
             }
-        }    
+        }
         return this;
 	};
 })(jQuery);
