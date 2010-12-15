@@ -19,6 +19,9 @@
 *   GNU General Public License for more details.
 *
 *   http://www.gnu.org/licenses/gpl.txt
+*
+*   The pagination pattern was inspired by Mike West's 'Accessible Pagination Pattern'
+*   http://mikewest.org/2010/02/an-accessible-pagination-pattern
 */
 
 ( function ($) {
@@ -142,9 +145,6 @@
                     scroll($nav.find(on_class).parent().prev().find(button).attr('id'));
                     $nav.find(over_class).removeClass(over);
                     $nav.find(on_class).parent().prev(1).find(button).not(directional_class).addClass(over);
-                    if (mouseover) {
-
-                    }
                     if ($nav.find(on_class).parent().index() === 1) {
                         $(document.getElementById(pag_prev)).addClass(off);
                     }
@@ -152,14 +152,10 @@
                     scroll($nav.find(on_class).parent().next().find(button).attr('id'));
                     $nav.find(over_class).removeClass(over);
                     $nav.find(on_class).parent().next(1).find(button).not(directional_class).addClass(over);
-                    if (mouseover) {
-
-                    }
                     if ($nav.find(on_class).parent().next().is(':last-child')) {
                         $(document.getElementById(pag_next)).addClass(off);
                     }
                 } else if ((id === pag_prev && !scroll_back) || (id === pag_next && !scroll_fwd)) {
-                    // set mouseover to false and add .off?
                     $(this).addClass(off);
                     return false;
                 } else {
@@ -194,24 +190,28 @@
                         $nav.find(over_class).removeClass(over);
                     }
                 }
-            }); 
+            });
+/*
+TODO:           
             $(window).keyup(function (e) {
                 if (e.which === 37) {
-//                    alert('wham!');
+//                    var scroll_back = $nav.find(on_class).parent().prev().data(page)
+//                    scroll($nav.find(on_class).parent().prev().find(button).attr('id'));
                 }
                 if (e.which === 39) {
-  //                  alert('bam!');
+//                    var scroll_fwd = $nav.find(on_class).parent().next().data(page)
+//                    scroll($nav.find(on_class).parent().next().find(button).attr('id'));
                 }                
             });
-/*            
+
+*/
             if ($.fn.ellipsify) {
-                $wrapper.find(div).not(':last').each( function () {
+                $wrapper.find(div).not(':last').each(function () {
                     $(this).children().ellipsify({
                         count: config.point_break - 1
                     });
                 });
             }
-*/
         }
         return this;
 	};

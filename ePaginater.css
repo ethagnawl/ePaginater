@@ -1,18 +1,21 @@
+/*
+Inprired by Mike West's Accessible Pagination Pattern
+http://mikewest.org/2010/02/an-accessible-pagination-pattern
+*/
+
 #ePaginater div.on { display:block; }
 
 ul#ePaginater_nav li { float:left; list-style-type:none; margin-right:4px; }
 
 ul#ePaginater_nav li button,
-/* ul#ePaginater_nav li button.off:focus */
     ul#ePaginater_nav li button.off:hover { background:rgba(246, 246, 245, .8); border:1px solid rgba(238, 238, 238, .8); color:rgba(34, 143, 221, .8); padding:4px; }
 
 ul#ePaginater_nav li button:hover,
-/*        ul#ePaginater_nav li button:focus,*/
-         ul#ePaginater_nav li button.over { background-color:rgba(102, 102, 102, .3); cursor:pointer; }
+    ul#ePaginater_nav li button.over { background-color:rgba(102, 102, 102, .3); cursor:pointer; }
 
 ul#ePaginater_nav li button.on { background-color:transparent; border:1px solid rgba(102, 102, 102, .3); color:rgba(102, 102, 102, .8); }
 
 ul#ePaginater_nav li button.on:hover,
-        ul#ePaginater_nav li button.on:focus { background-color:transparent; cursor:default; } 
+    ul#ePaginater_nav li button.on:focus { background-color:transparent; cursor:default; } 
 
 ul#ePaginater_nav li button.off:hover { cursor:default; }
